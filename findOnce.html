@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>findOnce</title>
+    <link rel="stylesheet" href="css/esri.css">
+    <link rel="stylesheet" href="css/mdui.css">
+    <style>
+    .find{
+      margin-top: 2em;
+    }
+    </style>
+</head>
+<body>
+    <div class="mdui-container">
+        <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-5">
+            <label class="mdui-textfield-label">经度</label>
+            <input class="mdui-textfield-input" type="text" id="longitude" name="longitude" required/>
+            <div class="mdui-textfield-error">经度不能为空</div>
+        </div> 
+        <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-5">
+            <label class="mdui-textfield-label">纬度</label>
+            <input class="mdui-textfield-input" type="text" id="latitude" name="latitude" required/>
+            <div class="mdui-textfield-error">纬度不能为空</div>
+        </div> 
+        <button class="mdui-btn mdui-ripple mdui-ripple-white mdui-color-blue find">查询</button>         
+      </div>    
+
+    <h1>esriMap Demo</h1>
+    <div id="mapDiv" class="map"></div>
+ 
+</body>
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="js/init.js"></script>
+<script src="js/mdui.min.js"></script>
+<script>
+
+  $(function(){
+    var map;
+    // require(["esri/map", "dojo/domReady!"], function(Map) { 
+    //   map = new Map("mapDiv", {
+    //     center: [114.049, 30.485],
+    //     zoom: 8,
+    //     basemap: "streets"
+    //   });  
+
+    // });
+    $('.find').click(function(){
+      var tempLo =parseInt($('#longitude').val());
+      var tempLa =parseInt($('#latitude').val());      
+      require(["esri/map", "dojo/domReady!"], function(Map) { 
+        Map("mapDiv", {
+        center: [tempLo, tempLa],
+        zoom: 8,
+        basemap: "streets"
+      });
+     });    
+    })
+  })
+  </script>
+</html>
