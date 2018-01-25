@@ -39,14 +39,14 @@
 
   $(function(){
     var map;
-    // require(["esri/map", "dojo/domReady!"], function(Map) { 
-    //   map = new Map("mapDiv", {
-    //     center: [114.049, 30.485],
-    //     zoom: 8,
-    //     basemap: "streets"
-    //   });  
+    require(["esri/map", "dojo/domReady!"], function(Map) { 
+      map = new Map("mapDiv", {
+        center: [114.049, 30.485],
+        zoom: 8,
+        basemap: "streets"
+      });  
 
-    // });
+    });
     $('.find').click(function(){
       var tempLo =parseInt($('#longitude').val());
       var tempLa =parseInt($('#latitude').val());      
