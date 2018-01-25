@@ -66,8 +66,9 @@
         dojo.connect(myMap, "onLoad", Afterload);    
         dojo.connect(myMap, "onClick", tipInfo);
 
-        var MyTiledMapServiceLayer = new esri.layers.ArcGISTiledMapServiceLayer("http://www.arcgisonline.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer");        
-        
+        //var MyTiledMapServiceLayer = new esri.layers.ArcGISTiledMapServiceLayer("http://www.arcgisonline.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer");        
+        //var MyTiledMapServiceLayer = new esri.layers.ArcGISTiledMapServiceLayer("http://cache1.arcgisonline.cn/arcgis/rest/services/ChinaOnlineCommunity/MapServer");        
+        var MyTiledMapServiceLayer = new esri.layers.ArcGISTiledMapServiceLayer("http://cache1.arcgisonline.cn/arcgis/rest/services/ChinaOnlineCommunity/MapServer");
         myMap.addLayer(MyTiledMapServiceLayer);
 
         var scalebar = new esri.dijit.Scalebar({
