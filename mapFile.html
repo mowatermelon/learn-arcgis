@@ -8,25 +8,22 @@
     <link rel="stylesheet" href="css/esri.css">
     <link rel="stylesheet" href="css/mdui.css">
     <style>
-        html, body{
+       html, body{
             padding: 0;
             margin: 0;
             height: 100%;
             width: 100%;
         }
         .find{
-          margin-top: 2em;
+            margin-top: 2em;
         }
         .map{
             height: calc(100% - 25px);
         }
         .mdui-toolbar {
             height: 25px; 
-            line-height: 25px;
-        }
-        .mdui-toolbar a{
-            padding:10px 0; 
-        }    
+            line-height: 25px; 
+        }     
         </style>
 </head>
 <body class="mdui-theme-primary-blue mdui-theme-accent-pink">
@@ -57,7 +54,7 @@
 
 <script>
     var myMap,markerSymbol,graphic,inst ;
-    require(["esri/map", "esri/geometry/Point","esri/dijit/Scalebar","dojo/domReady!"], function(Map) { 
+    require(["esri/map", "esri/geometry/Point","esri/dijit/Scalebar","dojo/domReady!","esri/symbols/CartographicLineSymbol","esri/layers/GraphicsLayer","esri/symbols/SimpleMarkerSymbol","esri/symbols/SimpleFillSymbol","esri/symbols/SimpleLineSymbol","esri/symbols/CartographicLineSymbol","esri/renderers/SimpleRenderer","esri/Color","esri/graphic","esri/InfoTemplate","esri/symbols/Font","esri/symbols/TextSymbol","esri/geometry/webMercatorUtils"], function(Map) { 
         myMap = new Map("mapDiv", {
         center: [114.40845006666666,30.456864444444443],        
         zoom: 17,
@@ -70,7 +67,6 @@
         isPanArrows:true,
         showAttribution:false
       }); 
-        loadSharp(); 
         dojo.connect(myMap, "onLoad", Afterload);    
         dojo.connect(myMap, "onClick", tipInfo);
         //dojo.connect(myMap, "onClick", tipInfo);
@@ -119,7 +115,7 @@
             tempLat = 34.26674722222222;
             findByLocal(tempLon,tempLat);
          }); 
-
+         readSharp();
     }
     //点击地图tip显示当前的经纬度
     function tipInfo(evt) {
@@ -169,23 +165,165 @@
 
             myMap.graphics.add(graphic);
         }
-  }; 
+  };
   
-  function loadSharp(){
-    console.log("hello");
-    var starttime = +new Date;
-    shapefile = new Shapefile({
-        shp: "demo.shp",
-        dbf: "demo.dbf"
-    }, function(data){
-        //var features = parser.read(data.geojson);
-        //vector.addFeatures(features);
-       // map.zoomToExtent(vector.getDataExtent());
+  function readFile(data) {
+        for(var i=0;i<data.length;i++){
+            var tempType = data[i].type;
+            var tempData = initArcJson(data[i]);
+            myMap.graphics.clear();
+            switch (tempType)
+            {
+                case "point":
+                    loadPoint(tempData);      //加载point信息
+                    break;
+                case "line":
+                    loadLine(tempData);      //加载line信息
+                    break;
+                case "polygon":
+                    loadPolyon(tempData);    //加载polygon信息
+                    break;
+                default:
+                    loadPoint(tempData);    //加载point信息
+                    break;
+            }				
+            
+        }
+    }
 
-        console.log("took",new Date - starttime,"milliseconds")
-        console.log(data);
-    })
-  }
+    function loadPoint(data) {
+        try {
+            
+            if(!!data){         
+                var markerSymbol = new esri.symbol.SimpleMarkerSymbol();
+                markerSymbol.setColor(new esri.Color([192, 64, 223,0.5]));
+                var labelPoint = data.geometry.points;
+                var labelSr =data.geometry.spatialReference;
+                var labelAttr =data.attributes;
+                
+                for(var item in labelPoint){   
+                        var point = new esri.geometry.Point([Number(labelPoint[item][0]), Number(labelPoint[item][1])], labelSr);
+                        var wmpoint = esri.geometry.webMercatorUtils.geographicToWebMercator(point);
+                        var textSymbol = new esri.symbols.TextSymbol("item: " + item );
+    
+             
+                        var grPp = new esri.Graphic(point, markerSymbol);
+                        var grPt = new esri.Graphic(point, textSymbol);
+                        
+                        if (grPp) {
+                                grPp.visible = true;
+                                grPp.attributes = labelAttr;
+                                grPt.visible = true;
+                                grPt.attributes = labelAttr;
+                                myMap.graphics.add(grPp);
+                                myMap.graphics.add(grPt);
+                        }              
+                        if(item==labelPoint.length-1){
+                            myMap.centerAndZoom(point,18);
+                        }
+                }
+
+            }else{
+                alert("数据为空");
+            }
+        }
+        catch (e) {
+                alert("加载点信息错误，错误原因是" + e.message);
+        } 					
+    }
+
+    function loadLine(data) {
+        try {
+
+            var LineSymbol = new esri.symbols.CartographicLineSymbol();
+            LineSymbol.setWidth(5);
+            var labelAttr =data.attributes;		
+            if(!!data){
+                data.visible = true;
+                var t_graphic =new esri.Graphic(data);
+                t_graphic.symbol=LineSymbol;
+                t_graphic.attributes = labelAttr;
+                myMap.graphics.add(t_graphic);
+                var centerPoint = t_graphic.geometry.getExtent().getCenter();
+                console.log(centerPoint);
+                myMap.centerAndZoom(centerPoint,18); 
+            }else{
+                alert("数据为空");
+            }
+        }
+        catch (e) {
+                alert("加载线信息错误，错误原因是" + e.message);
+        } 			
+    }
+    function loadPolyon(data) {
+        try {
+            var labelAttr =data.attributes;	
+            var fillSymbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_NULL,new esri.symbol.SimpleLineSymbol("solid", new esri.Color([82, 158, 229, 0.7]), 5),null);
+            if (!!data) {
+                data.visible = true;
+                var t_graphic =new esri.Graphic(data);
+                t_graphic.symbol=fillSymbol;
+                t_graphic.attributes = labelAttr;
+                myMap.graphics.add(t_graphic);
+
+                var centerPoint = t_graphic.geometry.getExtent().getCenter();
+                myMap.setExtent(t_graphic.geometry.getExtent().expand(1.5));
+                myMap.centerAt(centerPoint); 
+            }else{
+                alert("数据为空");
+            }
+        }
+        catch (e) {
+                alert("加载面信息错误，错误原因是" + e.message);
+        }  			
+        
+    }
+  
+    //调用读取shape插件
+    function readShape() {
+        myMap.graphics.clear();
+        var base = 'data/demo';
+
+        shapefile = new Shapefile({
+            shp: base+'.shp',
+            dbf:base+'.dbf',
+            jsRoot:'js/'
+        }, function (data) {
+            var starttime =new Date();
+            console.log("starttime"+starttime);
+            console.log(data);
+            var geometrys;
+            for (var i = 0; i < features.length; i++) {
+                geometrys = data.geojson.features[i].geometry;
+                console.log(geometrys);
+                if (geometrys.length>0) {
+                    readFile(geometrys);
+                }else{
+                    alert("加载失败");
+                }
+            }
+
+            console.log("took", new Date - starttime, "milliseconds")
+            console.log(data);
+        })        
+    }
+  
+    //初始化features数据
+    function initArcJson(data){
+        var starttime =new Date();
+        var getAttr = data;
+        getAttr.spatialReference= myMap.spatialReference;
+        var demo ={
+            "geometry": {},
+            "attributes": {
+                "generated": Number(starttime),
+                "title": "西瓜信息技术股份有限公司",
+                "status": 200
+            }
+        };
+        demo.geometry =	getAttr;			
+        return demo;      
+    }
   
   </script>
 </html>
