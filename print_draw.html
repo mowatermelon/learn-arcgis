@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>Print templates with esri.request</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.23/dijit/themes/tundra/tundra.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/css/esri.css">
+    <link rel="stylesheet" href="css/mdui.css">
+    <style>
+    html, body{
+      padding: 0;
+      margin: 0;
+      height: 100%;
+      width: 100%;
+    }
+    a{
+      text-decoration: none;
+    }
+    .mdui-fab {
+      background: #fff;
+    }
+    .mdui-fab:hover {
+      background: #fff;
+    }
+    .mapDiv{
+      height: 90%;
+    }
+    #print_button:empty{
+      display: none !important;
+    }
+    #printBtn .esriPrint {
+      padding: 0;
+    }
+    #printBtn .esriPrint a{
+      color:#fff;
+    }
+    /* #printBtn .esriPrint span{
+      border:0 none !important;
+    } */
+    span{
+      border:0 none !important;
+      outline: 0 none;
+    } 
+    span:active{
+      border:0 none !important;
+      outline: 0 none;
+    }        
+    </style>
+  </head>
+
+  <body>
+    <div class="mdui-container">
+      <div class="mdui-btn-group mdui-float-right mdui-clearfix">
+          <div  class="mdui-btn mdui-ripple mdui-color-pink ">
+            <i class="mdui-icon material-icons">brush</i>
+            <div id="point" class="mdui-float-right drawing">画点</div>
+          </div>
+          <div  class="mdui-btn mdui-ripple mdui-color-pink"><i class="mdui-icon material-icons">brush</i><div id="freehandpolyline" class="mdui-float-right drawing">画线</div></div>
+          <div  class="mdui-btn mdui-ripple mdui-color-pink"><i class="mdui-icon material-icons">brush</i><div id="freehandpolygon" class="mdui-float-right drawing">画多边形</div></div>
+          <div  class="mdui-btn mdui-ripple mdui-color-pink"><i class="mdui-icon material-icons">brush</i><div id="circle" class="mdui-float-right drawing">画圆</div></div>
+          <div class="mdui-btn mdui-ripple mdui-color-red"><i class="mdui-icon material-icons">print</i><div id="printBtn" class="mdui-float-right"></div></div>        
+      </div>
+    </div>
+
+    <div id="map" class="mapDiv"></div>
+
+
+  </body>
+
+  <script src="https://js.arcgis.com/3.23/"></script>
+  <script src="js/mdui.min.js"></script>
+  <script>
+      var app = {};
+      app.map = null; app.toolbar = null; app.tool = null; app.symbols = null; app.printer = null;
+      require([
+        "esri/map", "esri/toolbars/draw", "esri/dijit/Print",
+        "esri/layers/ArcGISTiledMapServiceLayer", "esri/layers/ArcGISDynamicMapServiceLayer",
+        "esri/layers/LayerDrawingOptions",
+        "esri/symbols/SimpleMarkerSymbol", "esri/symbols/SimpleLineSymbol", 
+        "esri/symbols/SimpleFillSymbol", "esri/graphic",
+        "esri/renderers/ClassBreaksRenderer",
+        "esri/config",
+        "dojo/_base/array", "esri/Color", "dojo/parser", 
+        "dojo/query", "dojo/dom", "dojo/dom-construct", 
+        "dijit/layout/BorderContainer", "dijit/layout/ContentPane", "dojo/domReady!"
+      ], function(
+        Map, Draw, Print,
+        ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer,
+        LayerDrawingOptions,
+        SimpleMarkerSymbol, SimpleLineSymbol,
+        SimpleFillSymbol, Graphic,
+        ClassBreaksRenderer,
+        esriConfig,
+        arrayUtils, Color, parser, 
+        query, dom, domConstruct, 
+        CheckBox, Button
+      ) {
+        parser.parse();
+
+        esriConfig.defaults.io.proxyUrl = "/proxy/";
+        
+        app.map = new Map("map", {
+          center: [-90.733, 30.541],
+          zoom: 8
+        });
+        app.map.on("load", function() {
+          app.toolbar = new Draw(app.map);
+          app.toolbar.on("draw-end", addToMap);
+        });
+
+        app.printUrl = "http://192.168.27.188:6080/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task";
+
+        // print dijit
+        app.printer = new Print({
+          map: app.map,
+          url: app.printUrl
+        }, dom.byId("printBtn"));
+        app.printer.startup();
+
+        app.printer.on('print-complete',function(evt){
+          console.log('The url to the print image is : ' + evt.result.url);
+        });
+
+        var url = "https://services.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer";
+        var tiledLayer = new ArcGISTiledMapServiceLayer(url, { "id": "Ocean" });
+        app.map.addLayer(tiledLayer);
+
+        var layer = new ArcGISDynamicMapServiceLayer("https://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer", {
+          id: "County Population",
+          opacity: 0.5
+        });
+        layer.setVisibleLayers([3]);
+        var layerDefs = [];
+        layerDefs[3] = "state_name = 'Louisiana'";
+        layer.setLayerDefinitions(layerDefs);
+        
+        var renderer = new ClassBreaksRenderer(null, "pop2000");
+        var outline = new SimpleLineSymbol("solid", new Color([0,0,0,0.5]), 1);
+        var colors = [
+          new Color([255,255,178,0.5]),
+          new Color([254,204,92,0.5]),
+          new Color([253,141,60,0.5]),
+          new Color([240,59,32,0.5]),
+          new Color([189,0,38,0.5])
+        ];
+        renderer.addBreak(0, 20000, new SimpleFillSymbol("solid", outline, colors[0]));
+        renderer.addBreak(20000, 50000, new SimpleFillSymbol("solid", outline, colors[1]));
+        renderer.addBreak(50000, 100000, new SimpleFillSymbol("solid", outline, colors[2]));
+        renderer.addBreak(10000, 1000000, new SimpleFillSymbol("solid", outline, colors[3]));
+        renderer.addBreak(1000000, 10000000, new SimpleFillSymbol("solid", outline, colors[4]));
+        var drawingOptions = new LayerDrawingOptions();
+        drawingOptions.renderer = renderer; 
+        // set the drawing options for the relevant layer
+        // optionsArray index corresponds to layer index in the map service
+        var optionsArray = [];
+        optionsArray[3] = drawingOptions;
+        layer.setLayerDrawingOptions(optionsArray);
+        app.map.addLayer(layer);
+
+
+        // set up symbols for the various geometry types
+        app.symbols = {};
+        app.symbols.point = new SimpleMarkerSymbol("square", 10, new SimpleLineSymbol(), new Color([0, 255, 0, 0.75]));
+        app.symbols.polyline = new SimpleLineSymbol("solid", new Color([255, 128, 0]), 2);
+        app.symbols.polygon = new SimpleFillSymbol().setColor(new Color([255,255,0,0.25]));
+        app.symbols.circle = new SimpleFillSymbol().setColor(new Color([0, 0, 180, 0.25]));
+
+        // find the divs for buttons
+        query(".drawing").forEach(function(btn) {
+          var button = new Button({
+            label: btn.innerHTML,
+            onClick: function() {
+              activateTool(this.id);
+            }
+          }, btn);
+        });
+
+        function activateTool(type) {
+          app.tool = type.replace("freehand", "");
+          app.toolbar.activate(type);
+          app.map.hideZoomSlider();
+        }
+
+        function addToMap(evt) {
+          app.toolbar.deactivate();
+          app.map.showZoomSlider();
+          
+          var graphic = new Graphic(evt.geometry, app.symbols[app.tool]);
+          app.map.graphics.add(graphic);
+        }
+      });
+    </script>
+</html>
+
