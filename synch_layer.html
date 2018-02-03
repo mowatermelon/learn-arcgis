@@ -1,0 +1,131 @@
+<!DOCTYPE html>  
+
+<html>  
+
+<head>  
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">  
+
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>  
+
+    <title>Simple Map</title>  
+
+    <link rel="stylesheet" href="https://js.arcgis.com/3.23/esri/css/esri.css">  
+
+    <style>  
+
+        html, body, #map1,#map2 {  
+
+            height: 100%;  
+
+            margin: 0;  
+
+            padding: 0;  
+
+        }  
+
+        body {  
+
+            background-color: #FFF;  
+
+            overflow: hidden;  
+
+            font-family: "Trebuchet MS";  
+
+        }  
+
+        #map1,#map2{  
+
+            float:left;  
+
+            width: 49.5%;  
+
+        }  
+
+        #map1{  
+
+            border-right: 2px solid #999;  
+
+        }  
+
+    </style>  
+
+    <script src="https://js.arcgis.com/3.14/"></script>  
+
+    <script>  
+
+        var map1,map2;  
+
+        require([  
+
+            "esri/map",  
+
+            "esri/layers/ArcGISTiledMapServiceLayer",  
+
+            "esri/layers/GraphicsLayer",  
+
+            "esri/graphic",  
+
+            "esri/symbols/PictureMarkerSymbol",  
+            "esri/symbols/SimpleMarkerSymbol",
+            "esri/symbols/SimpleLineSymbol",
+            "esri/Color",
+            "dojo/domReady!"],  
+
+        function(Map, Tiled, GraphicsLayer, Graphic, PictureMarkerSymbol,SimpleMarkerSymbol,SimpleLineSymbol,Color) {  
+
+            map1 = new Map("map1",{logo:false});  
+
+            map2 = new Map("map2",{logo:false});  
+
+            var tiled1 = new Tiled("https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer");  
+
+            var tiled2 = new Tiled("https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer");  
+
+            var mouseLayer = new GraphicsLayer();  
+
+            map1.addLayer(tiled1);  
+
+            map2.addLayer(tiled2);  
+
+            map2.addLayer(mouseLayer);  
+
+            map1.setLevel(4);  
+
+            map2.setLevel(4);  
+
+            map1.on("extent-change",function(){  
+
+                map2.setExtent(map1.extent);  
+
+            });  
+
+            map1.on("mouse-move",function(evt){  
+
+                mouseLayer.clear();  
+
+                var pms = new SimpleMarkerSymbol("square", 10, new SimpleLineSymbol(), new Color([0, 255, 0, 0.75]));
+
+                var graphic = new Graphic(evt.mapPoint,pms);  
+
+                mouseLayer.add(graphic);  
+
+            });  
+
+        });  
+
+    </script>  
+
+</head>  
+
+  
+
+<body>  
+
+<p id="map1"></p>  
+
+<p id="map2"></p>  
+
+</body>  
+
+</html>  
