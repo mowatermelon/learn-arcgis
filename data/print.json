@@ -2,10 +2,10 @@
   "mapOptions": {
     "showAttribution": true,
     "extent": {
-      "xmin": -13074850.263530374,
-      "ymin": 4015620.9839481427,
-      "xmax": -13073430.206864383,
-      "ymax": 4016753.2074295213,
+      "xmin": -13074727.247687988,
+      "ymin": 4015677.7145550684,
+      "xmax": -13073553.222706769,
+      "ymax": 4016696.4768225956,
       "spatialReference": {
         "wkid": 102100,
         "latestWkid": 3857
@@ -14,37 +14,36 @@
     "spatialReference": {
       "wkid": 102100,
       "latestWkid": 3857
-    },
-    "scale": 4513.988705
+    }
   },
   "operationalLayers": [
     {
       "id": "layer0",
       "title": "layer0",
       "opacity": 1,
-      "minScale": 0,
-      "maxScale": 0,
+      "minScale": 591657527.591555,
+      "maxScale": 70.5310735,
       "url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
     },
     {
       "id": "layer1",
       "title": "layer1",
       "opacity": 1,
-      "minScale": 0,
-      "maxScale": 0,
+      "minScale": 591657527.591555,
+      "maxScale": 70.5310735,
       "url": "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer"
     }
   ],
   "exportOptions": {
     "outputSize": [
       800,
-      1100
+      600
     ],
     "dpi": 96
   },
   "layoutOptions": {
-    "titleText": "截图打印",
-    "authorText": "Made by:  中天吉奥",
+    "titleText": "PRINT MAP",
+    "authorText": "Made by:  ZTGEO",
     "copyrightText": "copyright",
     "scaleBarOptions": {
       "metricUnit": "esriKilometers",
