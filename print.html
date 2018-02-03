@@ -59,7 +59,7 @@
         arrayUtils, dom, parser
       ) {
         parser.parse();
-        // esri.config.defaults.io.proxyUrl ="http://192.168.27.121:57824/proxy/proxy.ashx";
+        esriConfig.defaults.io.proxyUrl = "/proxy/";
         app.printUrl = "http://192.168.27.188:6080/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task";
 
         esriConfig.defaults.io.proxyUrl = "/proxy/";
@@ -111,19 +111,20 @@
           
           // create a print template for each choice
           templates = arrayUtils.map(templateNames, function(ch) {
+            console.log(ch);
             var plate = new PrintTemplate();
             plate.layout = plate.label = ch;
             plate.format = "PDF";
             plate.layoutOptions = { 
-              "authorText": "Made by:  中天吉奥",
-              "copyrightText": "copyright",
+              "authorText": "Made by:  ZTGEO",
+              "copyrightText": "copyright @ZTGEO",
               "legendLayers": [], 
-              "titleText": "截图打印", 
-              "scalebarUnit": "Miles" 
+              "titleText": "打印地图", 
+              "scalebarUnit": "Meters" 
             };
             return plate;
           });
-
+          console.log(templates);
           // create the print dijit
           app.printer = new Print({
             "map": app.map,
