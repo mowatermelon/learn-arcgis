@@ -2,10 +2,10 @@
   "mapOptions": {
     "showAttribution": true,
     "extent": {
-      "xmin": -13074727.247687988,
-      "ymin": 4015677.7145550684,
-      "xmax": -13073553.222706769,
-      "ymax": 4016696.4768225956,
+      "xmin": -13074176.88615526,
+      "ymin": 4016392.669493405,
+      "xmax": -13074031.92452549,
+      "ymax": 4016511.505185781,
       "spatialReference": {
         "wkid": 102100,
         "latestWkid": 3857
@@ -26,6 +26,80 @@
       "url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
     },
     {
+      "id": "map_graphics",
+      "opacity": 1,
+      "minScale": 0,
+      "maxScale": 0,
+      "featureCollection": {
+        "layers": [
+          {
+            "layerDefinition": {
+              "name": "polygonLayer",
+              "geometryType": "esriGeometryPolygon"
+            },
+            "featureSet": {
+              "geometryType": "esriGeometryPolygon",
+              "features": [
+                {
+                  "geometry": {
+                    "rings": [
+                      [
+                        [
+                          -13074158.896581227,
+                          4016416.1081915246
+                        ],
+                        [
+                          -13074158.896581227,
+                          4016488.066487662
+                        ],
+                        [
+                          -13074049.914099524,
+                          4016488.066487662
+                        ],
+                        [
+                          -13074049.914099524,
+                          4016416.1081915246
+                        ],
+                        [
+                          -13074158.896581227,
+                          4016416.1081915246
+                        ]
+                      ]
+                    ],
+                    "spatialReference": {
+                      "wkid": 102100,
+                      "latestWkid": 3857
+                    }
+                  },
+                  "symbol": {
+                    "color": [
+                      255,
+                      255,
+                      0,
+                      0
+                    ],
+                    "outline": {
+                      "color": [
+                        0,
+                        0,
+                        0,
+                        255
+                      ],
+                      "width": 1,
+                      "type": "esriSLS",
+                      "style": "esriSLSSolid"
+                    },
+                    "type": "esriSFS",
+                    "style": "esriSFSSolid"
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
       "id": "layer1",
       "title": "layer1",
       "opacity": 1,
@@ -42,14 +116,14 @@
     "dpi": 96
   },
   "layoutOptions": {
-    "titleText": "PRINT MAP",
+    "titleText": "中天吉奥",
     "authorText": "Made by:  ZTGEO",
-    "copyrightText": "copyright",
+    "copyrightText": "copyright @ZTGEO",
     "scaleBarOptions": {
-      "metricUnit": "esriKilometers",
-      "metricLabel": "km",
-      "nonMetricUnit": "esriMiles",
-      "nonMetricLabel": "mi"
+      "metricUnit": "esriMeters",
+      "metricLabel": "m",
+      "nonMetricUnit": "esriFeet",
+      "nonMetricLabel": "ft"
     },
     "legendOptions": {
       "operationalLayers": []
