@@ -1,0 +1,33 @@
+{
+  "name": "arcgis-4.0.0-ts",
+  "version": "1.0.0",
+  "description": "A arcgis V4 demo by using typescript",
+  "scripts": {
+    "dev": "tsc -w --listFiles --noUnusedParameters",
+    "service": "node ./service/dev.js",
+    "build":"tsc",
+    "lint": "tslint './src/*.ts'",
+    "test": "tsc -V"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mowatermelon/learn-arcgis.git"
+  },
+  "keywords": [
+    "typescript",
+    "arcgis 4.0"
+  ],
+  "author": "mowatermelon <neefoxmo@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mowatermelon/learn-arcgis/issues"
+  },
+  "homepage": "https://github.com/mowatermelon/learn-arcgis#readme",
+  "devDependencies": {
+    "tslint": "^4.2.0"
+  },
+  "dependencies": {
+    "typescript": "^2.4.1",
+    "@types/arcgis-js-api": "^4.7.0"
+  }
+}
