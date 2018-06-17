@@ -62,17 +62,22 @@ npm run test
 
 # instructions to tsconfig.json
 
-- `compilerOptions.module` - Specify module code generation: `"None"`, `"CommonJS"`, `"AMD"`, `"System"`, `"UMD"`, `"ES6"`, `"ES2015"` or `"ESNext"`.<br>► Only `"AMD"` and `"System"` can be used in conjunction with `--outFile`.<br>► `"ES6"` and `"ES2015"` values may be used when targeting `"ES5"` or lower.
-- `compilerOptions.noImplicitAny` - Raise error on expressions and declarations with an implied `any` type.
-- `compilerOptions.sourceMap` - Generates corresponding `.map` file.
-- `compilerOptions.target` - Output to ES5 to work across all supported browsers.
-- `compilerOptions.experimentalDecorators` - Enables experimental support for ES decorators.
-- `compilerOptions.preserveConstEnums` - Do not erase const enum declarations in generated code. See [const enums documentation](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#94-constant-enum-declarations) for more details.
-- `compilerOptions.suppressImplicitAnyIndexErrors` - Suppress `--noImplicitAny` errors for indexing objects lacking index signatures. See [issue #1232](https://github.com/Microsoft/TypeScript/issues/1232#issuecomment-64510362) for more details.
-- `compilerOptions.outDir` - Redirect output structure to the directory.
-- `compilerOptions.declaration` - Generates corresponding `.d.ts` file.
-- `compilerOptions.declarationDir` - Output directory for generated declaration files.
-- `include` - Array of files to compile. Can use glob-like file patterns.
-- `"noImplicitUseStrict": true.` [See Mozilla strict mode documentation](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Strict_mode) for further information regarding working in strict mode.
+|name|instruction|
+|:---|:---|
+|`compilerOptions.module` |Specify module code generation: `"None"`, `"CommonJS"`, `"AMD"`, `"System"`, `"UMD"`, `"ES6"`, `"ES2015"` or `"ESNext"`.<br>► Only `"AMD"` and `"System"` can be used in conjunction with `--outFile`.<br>► `"ES6"` and `"ES2015"` values may be used when targeting `"ES5"` or lower.|
+|`compilerOptions.noImplicitAny` |Raise error on expressions and declarations with an implied `any` type.|
+|`compilerOptions.sourceMap` |Generates corresponding `.map` file.|
+|`compilerOptions.target` |Output to ES5 to work across all supported browsers.|
+|`compilerOptions.experimentalDecorators` |Enables experimental support for ES decorators.|
+|`compilerOptions.preserveConstEnums` |Do not erase const enum declarations in generated code. See [const enums documentation](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md#94-constant-enum-declarations) for more details.|
+|`compilerOptions.suppressImplicitAnyIndexErrors` |Suppress `--noImplicitAny` errors for indexing objects lacking index signatures. See [issue #1232](https://github.com/Microsoft/TypeScript/issues/1232#issuecomment-64510362) for more details.|
+|`compilerOptions.outDir` |Redirect output structure to the directory.|
+|`compilerOptions.declaration` |Generates corresponding `.d.ts` file.|
+|`compilerOptions.declarationDir` |Output directory for generated declaration files.|
+|`include` |Array of files to compile. Can use glob-like file patterns.|
+|`"noImplicitUseStrict": true.` |[See Mozilla strict mode documentation](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Strict_mode) for further information regarding working in strict mode.|
 
-- [more detail](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
+> more detail
+
+- https://www.typescriptlang.org/docs/handbook/tsconfig-json.html
+- https://github.com/mowatermelon/learn-arcgis/wiki/ts-compiler-options
